@@ -1,5 +1,9 @@
 <template>
-  <singer-list :data="singerList" class="singer-list"></singer-list>
+  <div>
+    <singer-list :data="singerList" class="singer-list" @select="handleSkipSinger">
+    </singer-list>
+    <router-view></router-view> 
+  </div>
 </template>
 
 <script>
@@ -7,6 +11,8 @@
   import {ERR_OK} from 'api/config'
   import Singer from 'common/js/singer'
   import SingerList from 'components/list/list'
+  import {mapMutations} from 'vuex'
+
   export default {
     name: 'singer',
     data () {
@@ -21,6 +27,12 @@
       this._getSingerList()
     },
     methods: {
+      handleSkipSinger (singer) {
+        this.$router.push({
+          path: `/singer/${singer.id}`
+        })
+        this.setSinger(singer)
+      },
       _getSingerList () {
         getSingerList().then((res) => {
           if (res.code === ERR_OK) {
@@ -70,7 +82,10 @@
           return a.title.charCodeAt(0) - b.title.charCodeAt(0)
         })
         this.singerList = hot.concat(ret)
-      }
+      },
+      ...mapMutations({
+        setSinger: 'set_singer'
+      })
     }
   }
 </script>

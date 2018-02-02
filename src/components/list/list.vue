@@ -9,7 +9,7 @@
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul class="list-group-container">
-          <li v-for="item in group.items" class="list-group-item">          
+          <li v-for="item in group.items" class="list-group-item" @click="selectItem(item)">          
             <img v-lazy="item.avatar" :alt="item.name" class="avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -107,6 +107,9 @@
       }
     },
     methods: {
+      selectItem (item) {
+        this.$emit('select', item)
+      },
       handleShortCutTouchStart (e) {
         const cutIndex = getData(e.target, 'name')
         let firstTouch = e.targetTouches[0].pageY
